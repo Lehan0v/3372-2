@@ -1,0 +1,163 @@
+#include <iostream>
+#include <chrono>
+using namespace std;
+using namespace chrono;
+int main()
+{
+	setlocale(0, "");
+
+	time_point < steady_clock,
+		duration<__int64, ratio<1, 1000000000 >>>
+		start, end;
+	nanoseconds result;
+
+	const int N = 100; // создание массива рандомных чисел (100 значений + и -)
+	int arr[N];
+	for (int i = 0; i < N; i++)
+	{
+		arr[i] = rand() % 200 - 100; // -100 для создания отрицательных чисел
+	}
+	cout << endl;
+
+	cout << "Созданный массив: \n"; // вывод созданного массива на экран
+	for (int i = 0; i < N; i++)
+	{
+		cout << arr[i] << ' ';
+	}
+	cout << endl;
+
+	start = steady_clock::now(); // бабл сортировка
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N - 1; j++)
+		{
+			if (arr[j] > arr[j + 1])
+			{
+				swap(arr[j], arr[j + 1]);
+			}
+		}
+	}
+	cout << endl;
+	end = steady_clock::now();
+	result = duration_cast<nanoseconds>(end - start);
+	
+	cout << "Сортированный массив: \n"; // вывод отсортированного массива на экран
+	for (int i = 0; i < N; i++)
+	{
+		cout << arr[i] << ' ';
+	}
+	cout << endl;
+	cout << "Сортировка бабл заняла " << result.count() << " наносекунд\n\n";
+	
+
+	int result1 = result.count();
+
+	start = steady_clock::now(); // min max числа
+	cout << "Максимальное значение: " << arr[N - 1] << '\n'; 
+	cout << "Минимальное значение: " << arr[0] << endl; 
+	end = steady_clock::now();
+	result = duration_cast<nanoseconds>(end - start);
+	cout << "Нахождение max и min значений не отсортированного массива заняло " << (result.count() + result1) << " наносекунд\n";
+	cout << "Нахождение max и min значений отсортированного массива заняло " << result.count() << " наносекунд\n\n";
+
+	start = steady_clock::now(); // среднее значение массива
+	int sum = 0;
+	for (int i = 0; i < N; i++)
+	{
+		sum += arr[i];
+	}
+	cout << "Среднее значение массива: " << sum / N << '\n';
+	end = steady_clock::now();
+	result = duration_cast<nanoseconds>(end - start);
+	cout << "Нахождение среднего значения заняло " << result.count() << " наносекунд\n\n";
+
+	start = steady_clock::now(); // нахождение индекса среднего значения массива
+	int average = (sum / N);
+	int k = 0;
+	int l;
+	for (int i = 0; i < N; i++)
+	{
+		if (arr[i] == average)
+		{
+			k += 1;
+			l = i;
+		}
+			
+	}
+	end = steady_clock::now();
+	result = duration_cast<nanoseconds>(end - start);
+	if (k != 0)
+	{
+		cout << "Среднее значение " << average << " находится под индексом " << l << endl;
+	}
+	else
+		cout << "Среднее значение " << average << " не найдено в массиве" << endl;
+	cout << "Нахождение индекса среднего значения заняло " << result.count() << " наносекунд\n\n";
+
+	cout << "Нахождение количества значений меньше введеного\n";
+	cout << "Введите значение: "; // кол-во эл-ов меньше а
+	int a;
+	k = 0;
+	cin >> a;
+	for (int i = 0; i < N; i++)
+	{
+		if (arr[i] < a)
+		{
+			k += 1;
+		}
+	}
+	cout << "Количество найденых значение меньше введеного: " << k << "\n\n";
+
+	cout << "Нахождение количества значений больше введеного\n";
+	cout << "Введите значение: "; // кол-во эл-ов больше b
+	int b;
+	cin >> b;
+	k = 0;
+	for (int i = 0; i < N; i++)
+	{
+		if (arr[i] > b)
+		{
+			k += 1;
+		}
+	}
+	cout << "Количество найденых значение больше введеного: " << k << "\n\n";
+
+	cout << "Нахождение введеного значения в отсортированном массиве (перебором)\n";
+	cout << "Введите значение: "; // поиск числа в массиве
+	int c;
+	cin >> c;
+	k = 0;
+	for (int i = 0; i < N; i++)
+	{
+		if (arr[i] == c)
+		{
+			k += 1;
+		}
+	}
+	if (k == 0)
+	{
+		cout << "Введенное значение не присутствует в массиве" << "\n\n";
+	}
+	else
+		cout << "Введенное значение присутствует в массиве" << "\n\n";
+
+	// замена элементов массива
+	cout << "Замена индексов\n";
+	int ind1;
+	int ind2;
+	cout << "Введите первый индекс:";
+	cin >> ind1;
+	cout << "Введите второй индекс:";
+	cin >> ind2;
+
+	start = steady_clock::now();
+	swap(arr[ind1], arr[ind2]);
+	for (int i = 0; i < N; i++)
+	{
+		cout << arr[i] << ' ';
+	}
+	cout << endl;
+	end = steady_clock::now();
+	result = duration_cast<nanoseconds>(end - start);
+	cout << "Замена индексов заняло " << result.count() << " наносекунд\n\n";
+}
